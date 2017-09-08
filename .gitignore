@@ -1,0 +1,17 @@
+### Java:
+*.class
+*.jar
+
+### Gradle:
+build
+gradle
+/gradle
+.gradle
+gradlew
+gradlew.bat
+
+### Idea:
+.idea
+*.iml
+out
+target
