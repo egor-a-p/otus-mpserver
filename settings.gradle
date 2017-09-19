@@ -1,2 +1,6 @@
 rootProject.name = 'mpserver'
+include 'common'
+include 'transport'
+include 'ui-node'
+include 'db-node'
 

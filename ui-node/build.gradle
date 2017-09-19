@@ -1,0 +1,23 @@
+apply plugin: 'war'
+
+defaultTasks = ['clean', 'war']
+
+war {
+    archiveName = 'root.war'
+}
+
+task copyWar(type: Copy, dependsOn: 'war') {
+    copy {
+        from project.buildDir
+        into file("${rootProject.projectDir}/src/main/resources")
+        include 'libs/**'
+    }
+}
+
+dependencies {
+    compile project(':transport'),
+            'javax.websocket:javax.websocket-api:1.1',
+            'com.google.code.gson:gson:2.8.1',
+            'org.eclipse.jetty:jetty-server:9.4.6.v20170531',
+            'org.eclipse.jetty:jetty-util:9.4.6.v20170531'
+}

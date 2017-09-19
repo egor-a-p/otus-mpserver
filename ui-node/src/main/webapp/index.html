@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cache Stats</title>
+
+    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+    <link href="resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="resources/css/cache.css" rel="stylesheet">
+    <script src="resources/js/cache.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="loginPanel" id="loginPanel">
+        <h2 class="login-heading">Login:</h2><br>
+        <label for="inputUsername" class="sr-only">Username</label>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Username" required="" autofocus="">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="login()">Sign in</button>
+    </div>
+
+    <div class="alert alert-danger" id="alert">
+        <strong><span id="failureMessage"></span></strong>
+    </div>
+
+    <div class="cachePanel" id="cachePanel">
+        <h2 class="cache-heading">Cache stats:</h2><br>
+        <div class="cache-stats">
+            <h4>Cache size:</h4>
+            <div class="stats-container"><span class="badge" id="cacheSize">0</span></div>
+        </div>
+        <div class="cache-stats">
+            <h4>Hit count:</h4>
+            <div class="stats-container"><span class="badge" id="hitCount">0</span></div>
+        </div>
+
+        <div class="cache-stats">
+            <h4>Miss count:</h4>
+            <div class="stats-container"><span class="badge" id="missCount">0</span></div>
+        </div>
+
+        <div class="cache-stats">
+            <h4>Load count:</h4>
+            <div class="stats-container"><span class="badge" id="loadCount">0</span></div>
+        </div>
+
+        <div class="cache-stats">
+            <h4>Eviction count:</h4>
+            <div class="stats-container"><span class="badge" id="evictionCount">0</span></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

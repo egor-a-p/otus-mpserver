@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':common'),
+            'javax.enterprise:cdi-api:2.0',
+            'org.jboss.weld.servlet:weld-servlet-core:3.0.1.Final'
+}

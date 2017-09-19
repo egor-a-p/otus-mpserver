@@ -1,0 +1,9 @@
+dependencies {
+    compile 'org.hibernate:hibernate-core:5.2.10.Final',
+            'org.hibernate:hibernate-entitymanager:5.2.10.Final',
+            'org.hibernate:hibernate-hikaricp:5.2.10.Final',
+            'org.postgresql:postgresql:9.4.1212',
+            'javax.enterprise:cdi-api:2.0',
+            'com.google.guava:guava:23.0'
+
+}

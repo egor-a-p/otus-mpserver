@@ -1,0 +1,70 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #eee;
+}
+
+.loginPanel {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+    font-weight: normal;
+}
+
+.loginPanel .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.loginPanel .form-control:focus {
+    z-index: 2;
+}
+
+.loginPanel input[type="username"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.loginPanel input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.alert {
+    display: none;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.badge {
+    font-size: 1.2em;
+    background: lightgrey;
+    border-radius: 3px;
+}
+
+.cachePanel {
+    display: none;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+    font-weight: normal;
+}
+
+.cache-stats {
+    width: 100%;
+    display: flex;
+}
+
+.stats-container {
+    flex-grow: 1;
+    text-align: right;
+    vertical-align: middle;
+    line-height: 1.5em;
+}
