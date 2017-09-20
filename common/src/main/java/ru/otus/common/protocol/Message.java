@@ -28,23 +28,8 @@ public final class Message implements Serializable {
         return data.get(key);
     }
 
-    public enum Type {
-        AUTHENTICATION_REQUEST,
-        AUTHENTICATION_RESPONSE,
-        CACHE_STATE,
-        HANDSHAKE
+    public Serializable getOrDefault(Key key, Serializable s) {
+        return data.getOrDefault(key, s);
     }
 
-    public enum Key {
-        SESSION_ID,
-        USERNAME,
-        PASSWORD,
-        EMAIL,
-        CACHE_SIZE,
-        HIT_COUNT,
-        MISS_COUNT,
-        LOAD_COUNT,
-        EVICTION_COUNT,
-        NODE_UUID,
-    }
 }

@@ -72,7 +72,7 @@ public class TransportBean {
 
 	@PreDestroy
 	public void destroy() {
-		logger.debug("Shutdown transport...");
+		logger.debug("Destroy transport...");
 		transportProcessor.shutdown();
 		timer.cancel();
 		close();

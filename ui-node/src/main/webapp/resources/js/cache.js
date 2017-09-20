@@ -1,82 +1,98 @@
-var cacheWS;
+const AUTHENTICATION = "AUTHENTICATION";
+const DATA = "DATA";
+const ERROR = "ERROR";
 
-const LOGIN_MSG_TYPE = "LOGIN_MSG";
-const CACHE_MSG_TYPE = "CACHE_MSG";
-const CONNECTED_KEY = "CONNECTED_KEY";
-const HIT_COUNT_KEY = "HIT_COUNT_KEY";
-const MISS_COUNT_KEY = "MISS_COUNT_KEY";
-const LOAD_COUNT_KEY = "LOAD_COUNT_KEY";
-const EVICTION_COUNT_KEY = "EVICTION_COUNT_KEY";
-const SIZE_KEY = "SIZE_KEY";;
+const HIT_COUNT = "HIT_COUNT";
+const MISS_COUNT = "MISS_COUNT";
+const LOAD_COUNT = "LOAD_COUNT";
+const EVICTION_COUNT = "EVICTION_COUNT";
+const CACHE_SIZE = "CACHE_SIZE";
+const AUTHENTICATED = "AUTHENTICATED";
+
+var ws;
+
+function init() {
+    ws = new WebSocket("ws://" + document.location.host + "/cache");
+    ws.onopen = function () {
+        console.log("WebSocket open...");
+    };
+    ws.onmessage = function (e) {
+        handle(JSON.parse(e.data));
+    };
+    ws.onclose = function () {
+        close("Connection closed!");
+    };
+}
+
+function close(msg) {
+    console.log("WebSocket close...");
+    ws = null;
+    showLoginPanel();
+    alert(msg);
+}
+
+function handle(msg) {
+    switch (msg.type) {
+        case AUTHENTICATION:
+            if (msg.data[AUTHENTICATED]) {
+                applyData(msg.data);
+                showCachePanel();
+            } else {
+                alert("Invalid username or password!");
+            }
+            break;
+        case DATA:
+            applyData(msg.data);
+            break;
+        case ERROR:
+            close("Internal server error!");
+    }
+}
 
 function login() {
-    hideAlert();
     var username = document.getElementById('inputUsername').value;
     var password = document.getElementById('inputPassword').value;
 
     if (isBlank(username) || isBlank(password)) {
-        showAlert("Enter your username and password!");
+        alert("Enter your username and password!");
         return;
     }
 
-    cacheWS = new WebSocket("ws://" + document.location.host + "/cache");
-
-    cacheWS.onopen = function () {
-        cacheWS.send(JSON.stringify({
-                "type": LOGIN_MSG_TYPE, "data": {"username": username, "password": password}
-            }
-        ));
-    };
-
-    cacheWS.onmessage = function (event) {
-        var msg = JSON.parse(event.data);
-        switch (msg.type) {
-            case LOGIN_MSG_TYPE:
-                if (!msg.data[CONNECTED_KEY]) {
-                    showAlert("Illegal username or password!");
-                    cacheWS.close();
-                    break;
-                } else {
-                    document.getElementById('loginPanel').style.display = "none";
-                    document.getElementById('cachePanel').style.display = "block";
-                }
-            case CACHE_MSG_TYPE:
-                updateStats(msg.data);
-                break;
-            default:
-                close();
-        }
-    };
-
-    cacheWS.onclose = function () {
-        close();
+    if (ws === null) {
+        init();
     }
+
+    ws.send(JSON.stringify({"type": AUTHENTICATION, "data": {"username": username, "password": password}}));
 }
 
-function close() {
+function showCachePanel() {
+    document.getElementById('loginPanel').style.display = "none";
+    document.getElementById('cachePanel').style.display = "block";
+}
+
+function showLoginPanel() {
     document.getElementById('loginPanel').style.display = "block";
     document.getElementById('cachePanel').style.display = "none";
-    cacheWS.close();
 }
 
-function updateStats(arr) {
-    document.getElementById('cacheSize').textContent = arr[SIZE_KEY];
-    document.getElementById('hitCount').textContent = arr[HIT_COUNT_KEY];
-    document.getElementById('missCount').textContent = arr[MISS_COUNT_KEY];
-    document.getElementById('loadCount').textContent = arr[LOAD_COUNT_KEY];
-    document.getElementById('evictionCount').textContent = arr[EVICTION_COUNT_KEY];
+function applyData(arr) {
+    document.getElementById('cacheSize').textContent = arr[CACHE_SIZE];
+    document.getElementById('hitCount').textContent = arr[HIT_COUNT];
+    document.getElementById('missCount').textContent = arr[MISS_COUNT];
+    document.getElementById('loadCount').textContent = arr[LOAD_COUNT];
+    document.getElementById('evictionCount').textContent = arr[EVICTION_COUNT];
 }
 
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));
 }
 
-function showAlert(msg) {
+function alert(msg) {
+    document.getElementById('btn').disabled = true;
     document.getElementById('failureMessage').textContent = msg;
-    document.getElementById('alert').style.display = "block";
-}
-
-function hideAlert() {
-    document.getElementById('failureMessage').textContent = "";
-    document.getElementById('alert').style.display = "none";
+    document.getElementById('alert').style.opacity = 1;
+    setTimeout(function(){
+        document.getElementById('alert').style.opacity = 0;
+        document.getElementById('btn').disabled = false;
+    }, 1000);
 }

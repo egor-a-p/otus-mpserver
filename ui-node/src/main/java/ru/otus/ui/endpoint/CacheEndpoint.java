@@ -20,25 +20,25 @@ public class CacheEndpoint {
     @OnOpen
     public void onOpen(final Session session) {
         logger.debug("Open new session {}", session.getId());
-        registry.add(session);
+        registry.register(session);
     }
 
     @OnMessage
     public void onMessage(final Session session, final Message message) throws IOException, EncodeException {
+        registry.subscribe(session, message);
         logger.debug("Receive message {} from session {}", message, session.getId());
-        if (Message.Type.AUTHENTICATION_REQUEST == message.getType()) {
-            registry.requestAccess(session, message);
-        }
+
     }
 
     @OnClose
     public void onClose(final Session session) throws IOException {
-        registry.remove(session);
+        registry.deregister(session);
+        logger.debug("Session {} closed", session.getId());
     }
 
     @OnError
     public void onError(final Session session, Throwable t) throws IOException {
+        registry.deregister(session);
         logger.error("Error in session " + session.getId(), t);
-        registry.remove(session);
     }
 }

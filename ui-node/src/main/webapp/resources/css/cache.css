@@ -37,10 +37,11 @@ body {
 }
 
 .alert {
-    display: none;
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
+    opacity: 0;
+    transition: opacity 1s;
 }
 
 .badge {
