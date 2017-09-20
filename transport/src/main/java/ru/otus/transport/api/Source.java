@@ -6,4 +6,6 @@ public interface Source<M extends Serializable> extends AutoCloseable {
 
     M take();
 
+    void clear();
+
 }

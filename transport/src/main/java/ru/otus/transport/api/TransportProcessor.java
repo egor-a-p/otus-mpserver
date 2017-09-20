@@ -1,7 +1,5 @@
 package ru.otus.transport.api;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -10,11 +8,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class TransportProcessor<M extends Serializable> {
     private static final int POOL_SIZE = 2;
 
-    private final Connection<M> connection;
+    private Connection<M> connection;
     private final Source<M> source;
     private final Destination<M> destination;
 
@@ -22,20 +22,19 @@ public class TransportProcessor<M extends Serializable> {
 
     private ExecutorService executorService;
 
-    public TransportProcessor(Connection<M> connection, Source<M> source, Destination<M> destination) {
-        Objects.requireNonNull(connection);
+    public TransportProcessor(Source<M> source, Destination<M> destination) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(destination);
-        this.connection = connection;
         this.source = source;
         this.destination = destination;
         this.onShutdown = new CopyOnWriteArrayList<>();
     }
 
-    public void start(Runnable... onShutdown) throws TransportException {
+    public void start(Connection<M> connection, Runnable... onShutdown) throws TransportException {
         if (connection.isOpen()) {
             log.debug("Start transport...");
-            executorService = Executors.newFixedThreadPool(POOL_SIZE);
+            this.connection = connection;
+            this.executorService = Executors.newFixedThreadPool(POOL_SIZE);
             Collections.addAll(this.onShutdown, onShutdown);
             executorService.submit(this::processSend);
             executorService.submit(this::processReceive);

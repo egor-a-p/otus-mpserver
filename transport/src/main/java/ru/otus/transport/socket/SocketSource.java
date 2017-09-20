@@ -1,14 +1,14 @@
 package ru.otus.transport.socket;
 
-import ru.otus.transport.api.SourceException;
-import ru.otus.transport.api.Source;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import ru.otus.transport.api.Source;
+import ru.otus.transport.api.SourceException;
 
 class SocketSource<M extends Serializable> implements Source<M> {
 
@@ -45,5 +45,9 @@ class SocketSource<M extends Serializable> implements Source<M> {
             in = null;
             lock.unlock();
         }
+    }
+
+    @Override
+    public void clear() {
     }
 }
